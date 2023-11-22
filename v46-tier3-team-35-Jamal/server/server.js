@@ -5,7 +5,13 @@ const cors = require("cors");
 const morgan = require("morgan");
 const app = express();
 const PORT = 8000;
-
+app.use(cors(
+  {
+    origin: ["https://crypto-app-five-amber.vercel.app/"],
+    methods: ["POST", "GET"],
+    credentials: true
+  }
+))
 app.use(cors());
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
