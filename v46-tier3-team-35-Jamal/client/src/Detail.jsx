@@ -216,7 +216,7 @@ function Detail({ auth }) {
     setUsdAmount(convertCoinToUsd(coinValue));
   };
 
-  return (
+return (
     <div className="bg-gray-50" data-theme="light">
       <main>
         <div className="bg-white">
@@ -227,18 +227,18 @@ function Detail({ auth }) {
                 <a className="previous round">&#8249;</a>
               </Link>
               <span className="mb-5 inline-flex items-center rounded-md bg-[#1E293B] px-2 py-1 text-xs font-semibold text-[#F1F5F9]">
-                   Rank # {coinInfo.coingecko_rank ? coinInfo.coingecko_rank : ""}
+                Rank # {coinInfo ? coinInfo.coingecko_rank : ""}
               </span>
               <div className="flex items-center">
                 <img
                   className="h-10 mr-4"
-                  src={coinInfo.image.large}
+                  src={coinInfo ? coinInfo.image.large : ""}
                   alt="coin logo"
                 />
                 <h1 className="text-2xl font-bold tracking-tight text-gray-900 ">
-                  {coinInfo.name}{" "}
+                  {coinInfo ? coinInfo.name : ""}{" "}
                   <span className="ml-2 text-[#64748B] font-light text-xl">
-                    {coinInfo.symbol.toUpperCase()}
+                    {coinInfo ? coinInfo.symbol.toUpperCase() : ""}
                   </span>
                 </h1>
               </div>
@@ -246,14 +246,20 @@ function Detail({ auth }) {
               <section aria-labelledby="information-heading" className="mt-4">
                 <div className="flex items-center">
                   <span className="text-4xl text-gray-900 font-bold">
-                    {formatToUSD(coinInfo.market_data.current_price.usd)}
+                    {formatToUSD(
+                      coinInfo
+                        ? coinInfo.market_data.current_price.usd
+                        : ""
+                    )}
                   </span>
 
                   <div className="ml-4 pl-4">
                     <Percentage
                       num={
-                        coinInfo.market_data
-                          .price_change_percentage_24h_in_currency.usd
+                        coinInfo
+                          ? coinInfo.market_data
+                              .price_change_percentage_24h_in_currency.usd
+                          : ""
                       }
                     />
                   </div>
@@ -290,7 +296,11 @@ function Detail({ auth }) {
                           content={`Market Cap = Current Price x Circulating Supply\n\nRefers to the total market value of a cryptocurrency’s\n circulating supply. It is similar to the stock market’s\n measurement of multiplying price per share by shares\n readily available in the market (not held & locked by\n insiders, governments)`}
                         />
                         <span className="text-[#10172A]">
-                          {formatToUSD(coinInfo.market_data.market_cap.usd)}
+                          {formatToUSD(
+                            coinInfo
+                              ? coinInfo.market_data.market_cap.usd
+                              : ""
+                          )}
                         </span>
                       </dt>
                     </div>
@@ -302,7 +312,9 @@ function Detail({ auth }) {
                         />
                         <span className="text-[#10172A]">
                           {Math.floor(
-                            coinInfo.market_data.circulating_supply
+                            coinInfo
+                              ? coinInfo.market_data.circulating_supply
+                              : ""
                           ).toLocaleString()}
                         </span>
                       </dt>
@@ -314,7 +326,11 @@ function Detail({ auth }) {
                           content={`A measure of a cryptocurrency trading volume across all\n tracked platforms in the last 24 hours. This is tracked on\n a rolling 24-hour basis with no open/closing times.`}
                         />
                         <span className="text-[#10172A]">
-                          {formatToUSD(coinInfo.market_data.total_volume.usd)}
+                          {formatToUSD(
+                            coinInfo
+                              ? coinInfo.market_data.total_volume.usd
+                              : ""
+                          )}
                         </span>
                       </dt>
                     </div>
@@ -326,7 +342,9 @@ function Detail({ auth }) {
                         />
                         <span className="text-[#10172A]">
                           {Math.floor(
-                            coinInfo.market_data.total_supply
+                            coinInfo
+                              ? coinInfo.market_data.total_supply
+                              : ""
                           ).toLocaleString()}
                         </span>
                       </dt>
@@ -339,7 +357,9 @@ function Detail({ auth }) {
                         />
                         <span className="text-[#10172A]">
                           {formatToUSD(
-                            coinInfo.market_data.fully_diluted_valuation.usd
+                            coinInfo
+                              ? coinInfo.market_data.fully_diluted_valuation.usd
+                              : ""
                           )}
                         </span>
                       </dt>
@@ -351,7 +371,7 @@ function Detail({ auth }) {
                           content={`The maximum number of coins coded to exist in the\n lifetime of the cryptocurrency. It is comparable to the\n maximum number of issuable shares in the stock market.\n\nMax Supply = Theoretical maximum as coded`}
                         />
                         <span className="text-[#10172A]">
-                          {coinInfo.market_data.max_supply
+                          {coinInfo
                             ? Math.floor(
                                 coinInfo.market_data.max_supply
                               ).toLocaleString()
@@ -365,11 +385,13 @@ function Detail({ auth }) {
                 <div className="card bg-[#F1F5F9] shadow-xl mx-auto">
                   <div className="card-body">
                     <h2 className="card-title text-[#10172A]">
-                      {coinInfo.name} Converter
+                      {coinInfo ? coinInfo.name : ""} Converter
                     </h2>
                     <div className="form-control">
                       <label className="input-group">
-                        <span>{coinInfo.symbol.toUpperCase()}</span>
+                        <span>
+                          {coinInfo ? coinInfo.symbol.toUpperCase() : ""}
+                        </span>
                         <input
                           type="number"
                           className="input input-bordered"
@@ -390,8 +412,11 @@ function Detail({ auth }) {
                       </label>
                     </div>
                     <div className="text-[#334154] font-semibold">
-                      1 {coinInfo.symbol.toUpperCase()} = $
-                      {coinInfo.market_data.current_price.usd.toLocaleString()}
+                      1 {coinInfo ? coinInfo.symbol.toUpperCase() : ""} =
+                      $
+                      {coinInfo
+                        ? coinInfo.market_data.current_price.usd.toLocaleString()
+                        : ""}
                     </div>
                   </div>
                 </div>
@@ -403,7 +428,7 @@ function Detail({ auth }) {
               <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg">
                 <div>
                   <label className="text-xl font-semibold">
-                    {coinInfo.name} Price Chart ({coinInfo.symbol.toUpperCase()}
+                    {coinInfo ? coinInfo.name : ""} Price Chart ({coinInfo ? coinInfo.symbol.toUpperCase() : ""}
                     ){" "}
                   </label>
                   <div className="p-4">
