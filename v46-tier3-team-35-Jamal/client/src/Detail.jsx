@@ -227,7 +227,7 @@ function Detail({ auth }) {
                 <a className="previous round">&#8249;</a>
               </Link>
               <span className="mb-5 inline-flex items-center rounded-md bg-[#1E293B] px-2 py-1 text-xs font-semibold text-[#F1F5F9]">
-                Rank # {coinInfo.coingecko_rank}
+                   Rank # {coinInfo.coingecko_rank ? coinInfo.coingecko_rank : ""}
               </span>
               <div className="flex items-center">
                 <img
