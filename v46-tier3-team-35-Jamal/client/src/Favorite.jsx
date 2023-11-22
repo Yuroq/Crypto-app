@@ -31,7 +31,7 @@ function Favorite(props) {
     async function fetchLikedCoins() {
       try {
         const response = await axios.get(
-          `http://localhost:8000/favorite/list/${profileEmail}`
+          `crypto-app-five-amber.vercel.app/favorite/list/${profileEmail}`
         );
         setLikedCoins(response.data);
       } catch (err) {
@@ -46,7 +46,8 @@ function Favorite(props) {
 
   const handleDislike = async (coinName) => {
     try {
-      await axios.delete("http://localhost:8000/favorite/dislike", {
+      await axios.delete("crypto-app-five-amber.vercel.app
+/favorite/dislike", {
         data: {
           name: coinName,
           userEmail: profileEmail,
