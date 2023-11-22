@@ -22,11 +22,14 @@ import SearchPage from "./Components/Routes/SearchPage";
 import TopCryptos from "./Components/Routes/TopCryptos";
 import CategoriesList from "./Components/Routes/CategoriesList";
 import CryptoList from "./Components/Routes/CryptoList"
+import {disableReactDevTools} from '@fvilers/disable-react-devtools' 
 function App() {
   const authConst = Auth;
   const [search, setSearch] = useState("");
 
   console.log(search)
+
+  if(process.env.NODE_ENV === 'production') disableReactDevTools()
   return (
     <>
       <BrowserRouter>
