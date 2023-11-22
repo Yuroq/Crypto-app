@@ -37,6 +37,8 @@ ChartJS.register(
 
 const ranges = ["1d", "7d", "30d", "90d", "180d", "365d", "max"];
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 function Detail({ auth }) {
   const [profile, setProfile] = useState("");
   const [profileEmail, setProfileEmail] = useState("");
@@ -44,18 +46,37 @@ function Detail({ auth }) {
   useEffect(() => {
     setUserLoggedIn(auth.isAuthenticated());
   }, [auth]);
+  // useEffect(() => {
+  //   loadUserProfile();
+  // }, [userLoggedIn]);
+  // const loadUserProfile = async() => {
+  //   userLoggedIn
+  //     ? await auth.getProfile((profile, error) => setProfile({ profile, error }))
+  //     : "";
+  // };
+  
   useEffect(() => {
-    loadUserProfile();
-  }, [userLoggedIn]);
-  const loadUserProfile = () => {
-    userLoggedIn
-      ? auth.getProfile((profile, error) => setProfile({ profile, error }))
-      : "";
-  };
+    const loadProfile = async () => {
+      try {
+        const profile = await auth.getProfile();
+        setProfile(profile);
+        setProfileEmail(profile?.email || "");
+      } catch (error) {
+        console.error("Error loading profile:", error);
+      }
+    };
+  
+    loadProfile();
+  }, [profileEmail, auth]);
 
-  useEffect(() => {
-    setProfileEmail(profile.profile ? profile.profile.email : "");
-  }, [profile]);
+
+
+  // useEffect(() => {
+  //   setProfileEmail(profile ? profile.email : "");
+  // }, [profile]);
+
+  console.log("perfil",profile)
+  console.log("email",profileEmail)
 
   const { id } = useParams();
   const [coin, setCoin] = useState(null);
@@ -84,8 +105,7 @@ function Detail({ auth }) {
         // Check if the coin is liked
 
         const response = await axios.get(
-          `crypto-app-five-amber.vercel.app
-/favorite/check?name=${id}&userEmail=${profileEmail}`
+          `https://crypto-app-five-amber.vercel.app/favorite/check?name=${id}&userEmail=${profileEmail}`
         );
         if (response.data.liked) {
           setLiked(true);
@@ -128,8 +148,7 @@ function Detail({ auth }) {
 
   const handleLike = async () => {
     try {
-      await axios.post("crypto-app-five-amber.vercel.app
-/favorite/like", {
+      await axios.post(`https://crypto-app-five-amber.vercel.app/favorite/like`, {
         name: id,
         image: coinInfo.image.large,
         userEmail: profileEmail,
@@ -142,8 +161,7 @@ function Detail({ auth }) {
 
   const handleDislike = async () => {
     try {
-      await axios.delete("crypto-app-five-amber.vercel.app
-/favorite/dislike", {
+      await axios.delete(`https://crypto-app-five-amber.vercel.app/favorite/dislike`, {
         data: {
           name: id,
           userEmail: profileEmail,
