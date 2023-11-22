@@ -2,36 +2,47 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-function Favorite(props) {
+
+function Favorite({ auth }) {
   const [likedCoins, setLikedCoins] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState("");
   const [profileEmail, setProfileEmail] = useState("");
   const [userLoggedIn, setUserLoggedIn] = useState("");
-  const auth = props.auth;
-
   useEffect(() => {
     setUserLoggedIn(auth.isAuthenticated());
   }, [auth]);
-  useEffect(() => {
-    loadUserProfile();
-  }, [userLoggedIn]);
+  // useEffect(() => {
+  //   loadUserProfile();
+  // }, [userLoggedIn]);
 
-  const loadUserProfile = () => {
-    userLoggedIn
-      ? auth.getProfile((profile, error) => setProfile({ profile, error }))
-      : "";
-  };
+  // const loadUserProfile = () => {
+  //   userLoggedIn
+  //     ? auth.getProfile((profile, error) => setProfile({ profile, error }))
+  //     : "";
+  // };
 
   useEffect(() => {
-    setProfileEmail(profile ? profile.profile.email : "");
-  }, [profile]);
+    const loadProfile = async () => {
+      try {
+        const profile = await auth.getProfile();
+        setProfile(profile);
+        setProfileEmail(profile?.email || "");
+      } catch (error) {
+        console.error("Error loading profile:", error);
+      }
+    };
+  
+    loadProfile();
+  }, [profileEmail, auth]);
+
+
 
   useEffect(() => {
     async function fetchLikedCoins() {
       try {
         const response = await axios.get(
-          `crypto-app-five-amber.vercel.app/favorite/list/${profileEmail}`
+          `https://crypto-app-five-amber.vercel.app/favorite/list/${profileEmail}`
         );
         setLikedCoins(response.data);
       } catch (err) {
@@ -46,8 +57,7 @@ function Favorite(props) {
 
   const handleDislike = async (coinName) => {
     try {
-      await axios.delete("crypto-app-five-amber.vercel.app
-/favorite/dislike", {
+      await axios.delete(`https://crypto-app-five-amber.vercel.app/favorite/dislike`, {
         data: {
           name: coinName,
           userEmail: profileEmail,
@@ -70,7 +80,7 @@ function Favorite(props) {
   }
 
   return (
-    <div style={{ overflowX: "scroll" }}>
+    <div className="overflow-x-auto p-2">
       <div className="max-w-3xl mx-auto overflow-hidden rounded-lg shadow">
         <table className="table w-full" data-theme="light">
           <thead>
@@ -88,13 +98,13 @@ function Favorite(props) {
                   {index + 1}
                 </th>
                 <td>
-                  <Link to={`/coin/${coin.name.toLowerCase()}`}>
+                  <Link to={`/coin/${coin.name}`}>
                     <img className="h-8" src={coin.image} alt={coin.symbol} />
                   </Link>
                 </td>
                 <td>
                   <Link
-                    to={`/coin/${coin.name.toLowerCase()}`}
+                    to={`/coin/${coin.name}`}
                     className="font-semibold text-[#333333]"
                   >
                     {coin.name.charAt(0).toUpperCase() + coin.name.slice(1)}
