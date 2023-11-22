@@ -84,7 +84,8 @@ function Detail({ auth }) {
         // Check if the coin is liked
 
         const response = await axios.get(
-          `http://localhost:8000/favorite/check?name=${id}&userEmail=${profileEmail}`
+          `crypto-app-five-amber.vercel.app
+/favorite/check?name=${id}&userEmail=${profileEmail}`
         );
         if (response.data.liked) {
           setLiked(true);
@@ -127,7 +128,8 @@ function Detail({ auth }) {
 
   const handleLike = async () => {
     try {
-      await axios.post("http://localhost:8000/favorite/like", {
+      await axios.post("crypto-app-five-amber.vercel.app
+/favorite/like", {
         name: id,
         image: coinInfo.image.large,
         userEmail: profileEmail,
@@ -140,7 +142,8 @@ function Detail({ auth }) {
 
   const handleDislike = async () => {
     try {
-      await axios.delete("http://localhost:8000/favorite/dislike", {
+      await axios.delete("crypto-app-five-amber.vercel.app
+/favorite/dislike", {
         data: {
           name: id,
           userEmail: profileEmail,
