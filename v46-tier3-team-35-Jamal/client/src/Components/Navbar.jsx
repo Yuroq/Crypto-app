@@ -1,7 +1,8 @@
 import "../App.css";
 import { NavLink } from "react-router-dom";
-import { BiHomeAlt2, BiSolidDashboard } from "react-icons/bi";
+import { BiSolidDashboard } from "react-icons/bi";
 import { AiOutlineHeart, AiOutlineSearch } from "react-icons/ai";
+import { IoLibrary } from "react-icons/io5";
 import { useState } from "react";
 function NavBar({ auth, setSearch }) {
   const { isAuthenticated, logout } = auth;
@@ -117,6 +118,16 @@ function NavBar({ auth, setSearch }) {
         >
           <button className="btn btn-ghost btn-circle">
             <AiOutlineHeart />
+          </button>
+        </NavLink>
+
+        <NavLink
+          to="/portfolio"
+          style={{ marginLeft: -40 }}
+          className={({ isActive }) => (isActive ? "Active2" : "non-Active2")}
+        >
+          <button className="btn btn-ghost btn-circle">
+          <IoLibrary />
           </button>
         </NavLink>
       </div>

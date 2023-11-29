@@ -6,8 +6,7 @@ import {
 } from "@heroicons/react/20/solid";
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import { Tooltip as InfoTooltip } from "react-tooltip";
-import { Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {
   Chart as ChartJS,
@@ -23,6 +22,7 @@ import {
 import { Line } from "react-chartjs-2";
 import moment from "moment";
 import axios from "axios";
+import AddToPortfolio from "./Components/Portfolio/AddToPortfolio";
 
 ChartJS.register(
   CategoryScale,
@@ -37,46 +37,34 @@ ChartJS.register(
 
 const ranges = ["1d", "7d", "30d", "90d", "180d", "365d", "max"];
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-
 function Detail({ auth }) {
   const [profile, setProfile] = useState("");
   const [profileEmail, setProfileEmail] = useState("");
   const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const [addCryptoToPortfolio, setAddCryptoToPortfolio] = useState(false);
   useEffect(() => {
     setUserLoggedIn(auth.isAuthenticated());
   }, [auth]);
-  // useEffect(() => {
-  //   loadUserProfile();
-  // }, [userLoggedIn]);
-  // const loadUserProfile = async() => {
-  //   userLoggedIn
-  //     ? await auth.getProfile((profile, error) => setProfile({ profile, error }))
-  //     : "";
-  // };
-  
   useEffect(() => {
-    const loadProfile = async () => {
-      try {
-        const profile = await auth.getProfile();
-        setProfile(profile);
-        setProfileEmail(profile?.email || "");
-      } catch (error) {
-        console.error("Error loading profile:", error);
-      }
-    };
-  
-    loadProfile();
-  }, [profileEmail, auth]);
+    loadUserProfile();
+  }, [userLoggedIn]);
+  const loadUserProfile = () => {
+    userLoggedIn
+      ? auth.getProfile((profile, error) => setProfile({ profile, error }))
+      : "";
+  };
 
+  useEffect(() => {
+    setProfileEmail(profile.profile ? profile.profile.email : "");
+  }, [profile]);
 
-
-  // useEffect(() => {
-  //   setProfileEmail(profile ? profile.email : "");
-  // }, [profile]);
-
-  console.log("perfil",profile)
-  console.log("email",profileEmail)
+  function addCryptoToPortfolioHandler() {
+    if(userLoggedIn) {
+    setAddCryptoToPortfolio(true);
+    } else {
+      alert("Please log in to user features");
+    }
+  }
 
   const { id } = useParams();
   const [coin, setCoin] = useState(null);
@@ -88,7 +76,22 @@ function Detail({ auth }) {
   //coin converter
   const [usdAmount, setUsdAmount] = useState("");
   const [coinAmount, setCoinAmount] = useState("");
+  useEffect(() => {
+    async function fetchLikedCoins() {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/favorite/list/${profileEmail}`
+        );
+  
+      } catch (err) {
+        console.error("Error fetching liked coins:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
 
+    fetchLikedCoins();
+  }, [profileEmail]);
   useEffect(() => {
     async function fetchData() {
       setIsLoading(true);
@@ -105,7 +108,7 @@ function Detail({ auth }) {
         // Check if the coin is liked
 
         const response = await axios.get(
-          `https://crypto-app-five-amber.vercel.app/favorite/check?name=${id}&userEmail=${profileEmail}`
+          `http://localhost:8000/favorite/check?name=${id}&userEmail=${profileEmail}`
         );
         if (response.data.liked) {
           setLiked(true);
@@ -147,29 +150,37 @@ function Detail({ auth }) {
   };
 
   const handleLike = async () => {
-    try {
-      await axios.post(`https://crypto-app-five-amber.vercel.app/favorite/like`, {
-        name: id,
-        image: coinInfo.image.large,
-        userEmail: profileEmail,
-      });
-      setLiked(true);
-    } catch (error) {
-      console.error("Error liking the coin:", error);
+    if (userLoggedIn) {
+      try {
+        await axios.post("http://localhost:8000/favorite/like", {
+          name: id,
+          image: coinInfo.image.large,
+          userEmail: profileEmail,
+        });
+        setLiked(true);
+      } catch (error) {
+        console.error("Error liking the coin:", error);
+      }
+    } else {
+      alert("Please log in to user features");
     }
   };
 
   const handleDislike = async () => {
-    try {
-      await axios.delete(`https://crypto-app-five-amber.vercel.app/favorite/dislike`, {
-        data: {
-          name: id,
-          userEmail: profileEmail,
-        },
-      });
-      setLiked(false);
-    } catch (error) {
-      console.error("Error disliking the coin:", error);
+    if (userLoggedIn) {
+      try {
+        await axios.delete("http://localhost:8000/favorite/dislike", {
+          data: {
+            name: id,
+            userEmail: profileEmail,
+          },
+        });
+        setLiked(false);
+      } catch (error) {
+        console.error("Error disliking the coin:", error);
+      }
+    } else {
+      alert("Please log in to user features");
     }
   };
 
@@ -209,16 +220,23 @@ function Detail({ auth }) {
     setCoinAmount(convertUsdToCoin(usdValue));
   };
 
-  // Event handler for coin input changes
   const handleCoinAmountChange = (event) => {
     const coinValue = event.target.value;
     setCoinAmount(coinValue);
     setUsdAmount(convertCoinToUsd(coinValue));
   };
-
-return (
+  return (
     <div className="bg-gray-50" data-theme="light">
       <main>
+        {addCryptoToPortfolio ? (
+          <AddToPortfolio
+            setAddCryptoToPortfolio={setAddCryptoToPortfolio}
+            coinInfo={coinInfo}
+            userEmail={profileEmail}
+          />
+        ) : (
+          ""
+        )}
         <div className="bg-white">
           <div className="mx-auto max-w-2xl px-4 pb-24 pt-6 sm:px-6 sm:pb-32 lg:grid lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
             {/* coin data */}
@@ -247,9 +265,7 @@ return (
                 <div className="flex items-center">
                   <span className="text-4xl text-gray-900 font-bold">
                     {formatToUSD(
-                      coinInfo
-                        ? coinInfo.market_data.current_price.usd
-                        : ""
+                      coinInfo ? coinInfo.market_data.current_price.usd : ""
                     )}
                   </span>
 
@@ -284,6 +300,15 @@ return (
                         like
                       </button>
                     )}
+
+                    <button
+                      className="button-6"
+                      role="button"
+                      style={{ width: 300 }}
+                      onClick={addCryptoToPortfolioHandler}
+                    >
+                      + Add to portfolio
+                    </button>
                   </div>
                 </div>
 
@@ -297,9 +322,7 @@ return (
                         />
                         <span className="text-[#10172A]">
                           {formatToUSD(
-                            coinInfo
-                              ? coinInfo.market_data.market_cap.usd
-                              : ""
+                            coinInfo ? coinInfo.market_data.market_cap.usd : ""
                           )}
                         </span>
                       </dt>
@@ -342,9 +365,7 @@ return (
                         />
                         <span className="text-[#10172A]">
                           {Math.floor(
-                            coinInfo
-                              ? coinInfo.market_data.total_supply
-                              : ""
+                            coinInfo ? coinInfo.market_data.total_supply : ""
                           ).toLocaleString()}
                         </span>
                       </dt>
@@ -412,8 +433,7 @@ return (
                       </label>
                     </div>
                     <div className="text-[#334154] font-semibold">
-                      1 {coinInfo ? coinInfo.symbol.toUpperCase() : ""} =
-                      $
+                      1 {coinInfo ? coinInfo.symbol.toUpperCase() : ""} = $
                       {coinInfo
                         ? coinInfo.market_data.current_price.usd.toLocaleString()
                         : ""}
@@ -428,8 +448,8 @@ return (
               <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg">
                 <div>
                   <label className="text-xl font-semibold">
-                    {coinInfo ? coinInfo.name : ""} Price Chart ({coinInfo ? coinInfo.symbol.toUpperCase() : ""}
-                    ){" "}
+                    {coinInfo ? coinInfo.name : ""} Price Chart (
+                    {coinInfo ? coinInfo.symbol.toUpperCase() : ""}){" "}
                   </label>
                   <div className="p-4">
                     <div className="join">

@@ -22,11 +22,13 @@ import SearchPage from "./Components/Routes/SearchPage";
 import TopCryptos from "./Components/Routes/TopCryptos";
 import CategoriesList from "./Components/Routes/CategoriesList";
 import CryptoList from "./Components/Routes/CryptoList"
+import Portfolio from "./Components/Portfolio/Portfolio";
 import {disableReactDevTools} from '@fvilers/disable-react-devtools' 
 function App() {
   const authConst = Auth;
   const [search, setSearch] = useState("");
 
+    
   console.log(search)
 
   if(process.env.NODE_ENV === 'production') disableReactDevTools()
@@ -54,6 +56,7 @@ function App() {
             <Route path="/prices" element={<Prices />} />
             <Route path="/coin/:id" element={<Detail auth={authConst} />} />
             <Route path="/favorite" element={<Favorite auth={authConst} />} />
+            <Route path="/portfolio" element={<Portfolio auth={authConst} />} />
           </Routes>
         </div>
         <div style={{ display: "flex" }}>

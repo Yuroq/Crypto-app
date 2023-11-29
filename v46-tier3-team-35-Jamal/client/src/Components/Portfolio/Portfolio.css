@@ -1,0 +1,251 @@
+.portfolio-div {
+  background-color: white;
+}
+.portfolio-total {
+  font-size: 40px;
+  margin-left: 460px;
+  font-weight: bold;
+}
+.profit-label {
+  font-size: 20px;
+  margin-left: 460px;
+  font-weight: light;
+}
+
+/* CSS */
+.button-6 {
+  left: 1240px;
+  align-items: center;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0.25rem;
+  box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+  box-sizing: border-box;
+  color: rgba(0, 0, 0, 0.85);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: system-ui, -apple-system, system-ui, "Helvetica Neue", Helvetica,
+    Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  justify-content: center;
+  line-height: 1.25;
+  margin: 0;
+  min-height: 3rem;
+  padding: calc(0.875rem - 1px) calc(4.5rem - 1px);
+  position: absolute;
+  text-decoration: none;
+  transition: all 250ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  width: auto;
+}
+
+.button-6:hover,
+.button-6:focus {
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.button-6:hover {
+  transform: translateY(-1px);
+}
+
+.button-6:active {
+  background-color: #f0f0f1;
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
+  color: rgba(0, 0, 0, 0.65);
+  transform: translateY(0);
+}
+
+.portfolio-stats {
+  display: flex;
+}
+
+.all-time-profit {
+  background-color: #e5e4e2;
+  border-radius: 20px;
+  width: 300px;
+  height: 140px;
+  margin-left: 460px;
+}
+.all-time-profit-label {
+  font-size: 20px;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+.all-time-profit-stat {
+  font-size: 30px;
+  margin-top: 10px;
+  margin-left: 70px;
+}
+.top-performer-stats {
+  display: flex;
+}
+.top-performer {
+  background-color: #e5e4e2;
+  border-radius: 20px;
+  width: 300px;
+  height: 140px;
+  margin-left: 60px;
+}
+.top-performer-img {
+  width: 70px;
+  height: auto;
+  margin-left: 18px;
+  margin-top: 5px;
+}
+.top-performer-name {
+  font-size: 30px;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-left: 20px;
+}
+.top-performer-label {
+  font-size: 20px;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+.top-performer-stat {
+  font-size: 17px;
+  color: green;
+  margin-top: -20px;
+  margin-left: 110px;
+}
+.worst-performer {
+  background-color: #e5e4e2;
+  border-radius: 20px;
+  width: 300px;
+  height: 120px;
+  margin-left: 60px;
+}
+
+.worst-performer-label {
+  font-size: 20px;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.worst-performer-stat {
+  font-size: 17px;
+  color: red;
+  margin-top: -20px;
+  margin-left: 110px;
+}
+
+.portfolio-chart .overflow-x-auto {
+  margin-top: 200px;
+}
+
+.card {
+  position: absolute;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0.5);
+}
+
+.AddToPortfolio-div {
+  width: 500px;
+  height: 500px;
+  background-color: aliceblue;
+  position: fixed;
+  top: 20%;
+  left: 34%;
+  z-index: 9;
+}
+
+.add-port-header {
+  font-size: 35px;
+  font-weight: bold;
+  text-align: center;
+}
+.port-crypto-name {
+  font-size: 40px;
+  font-weight: bold;
+  text-align: center;
+  margin-right: 10px;
+  margin-top: 80px;
+}
+
+.port-inputs {
+  margin-top: 0px;
+  display: flex;
+}
+.port-inputs input {
+  width: 210px;
+  margin-left: 26px;
+}
+.port-crypto-quanity {
+  margin-top: 20px;
+  margin-left: 26px;
+}
+.port-crypto-price {
+  margin-left: 184px;
+  margin-top: 20px;
+}
+.input-labels {
+  display: flex;
+}
+
+.exit {
+  margin-left: 480px;
+  font-size: 20px;
+}
+
+/* CSS */
+.button-58 {
+  margin-top: 50px;
+  width: 300px;
+  margin-left: 100px;
+  align-items: center;
+  background-color: #06f;
+  border: 2px solid #06f;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  fill: #000;
+  font-family: Inter, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  height: 48px;
+  justify-content: center;
+  letter-spacing: -0.8px;
+  line-height: 24px;
+  min-width: 140px;
+  outline: 0;
+  padding: 0 17px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.3s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-58:focus {
+  color: #171e29;
+}
+
+.button-58:hover {
+  background-color: #3385ff;
+  border-color: #3385ff;
+  fill: #06f;
+}
+
+.button-58:active {
+  background-color: #3385ff;
+  border-color: #3385ff;
+  fill: #06f;
+}
+
+@media (min-width: 768px) {
+  .button-58 {
+    min-width: 170px;
+  }
+}

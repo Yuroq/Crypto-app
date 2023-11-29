@@ -10,6 +10,7 @@ import { HeartIcon } from "@heroicons/react/20/solid";
 import axios from "axios";
 import MobileDashBoardNav from "../mobileDashBoardNav";
 import MobileSearchPageStats from "../Search/MobileSearchPageStats";
+import AddToPortfolio from "../Portfolio/AddToPortfolio";
 function SearchPage(props) {
   const search = props.search;
   const [cryptoId, setCryptoId] = useState([]);
@@ -19,6 +20,7 @@ function SearchPage(props) {
   const [profile, setProfile] = useState("");
   const [profileEmail, setProfileEmail] = useState("");
   const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const [addCryptoToPortfolio, setAddCryptoToPortfolio] = useState(false);
   const auth = props.auth;
   useEffect(() => {
     setName(search);
@@ -36,11 +38,11 @@ function SearchPage(props) {
   };
 
   useEffect(() => {
-    fetch(`https://api.coingecko.com/api/v3/search?query=${name}`)
+    fetch(`https://api.coingecko.com/api/v3/search?query=${search}`)
       .then((response) => response.json())
       .then((data) => setCryptoId(data.coins[0].id))
       .catch((error) => console.error(error));
-  }, [name, search]);
+  }, [name]);
   useEffect(() => {
     setProfileEmail(profile.profile ? profile.profile.email : "");
   }, [profile]);
@@ -67,75 +69,108 @@ function SearchPage(props) {
     fetchData();
   }, [profileEmail, cryptoInfo.name]);
   const handleLike = async () => {
-    try {
-      await axios.post("http://localhost:8000/favorite/like", {
-        name: cryptoInfo.name.toLowerCase(),
-        image: cryptoInfo.image.thumb,
-        userEmail: profileEmail,
-      });
-      setLiked(true);
-    } catch (error) {
-      console.error("Error liking the coin:", error);
+    if (userLoggedIn) {
+      try {
+        await axios.post("http://localhost:8000/favorite/like", {
+          name: cryptoInfo.name.toLowerCase(),
+          image: cryptoInfo.image.thumb,
+          userEmail: profileEmail,
+        });
+        setLiked(true);
+      } catch (error) {
+        console.error("Error liking the coin:", error);
+      }
+    } else {
+      alert("Please log in to user features");
     }
   };
 
   const handleDislike = async () => {
-    try {
-      await axios.delete("http://localhost:8000/favorite/dislike", {
-        data: {
-          name: cryptoInfo.name.toLowerCase(),
-          userEmail: profileEmail,
-        },
-      });
-      setLiked(false);
-    } catch (error) {
-      console.error("Error disliking the coin:", error);
+    if (userLoggedIn) {
+      try {
+        await axios.delete("http://localhost:8000/favorite/dislike", {
+          data: {
+            name: cryptoInfo.name.toLowerCase(),
+            userEmail: profileEmail,
+          },
+        });
+        setLiked(false);
+      } catch (error) {
+        console.error("Error disliking the coin:", error);
+      }
+    } else {
+      alert("Please log in to user features");
     }
   };
+
+  function addCryptoToPortfolioHandler() {
+    if (userLoggedIn) {
+      setAddCryptoToPortfolio(true);
+    } else {
+      alert("Please log in to user features");
+    }
+  }
   return (
     <div className="searchPage">
+      {addCryptoToPortfolio ? (
+        <AddToPortfolio
+          setAddCryptoToPortfolio={setAddCryptoToPortfolio}
+          coinInfo={cryptoInfo}
+          userEmail={profileEmail}
+        />
+      ) : (
+        ""
+      )}
       <div className="mobile-search-dash-board">
         <MobileDashBoardNav />
       </div>
       <div className="crypto-header">
-      <div
-        className="avatar"
-        style={{ width: 170, height: "auto", marginLeft: 50, marginTop: 20 }}
-      >
-        <img
-          src={cryptoInfo.length === undefined ? cryptoInfo.image.thumb : ""}
-          alt="Avatar Tailwind CSS Component"
-          className="crypto-picture"
-        />
+        <div
+          className="avatar"
+          style={{ width: 170, height: "auto", marginLeft: 50, marginTop: 20 }}
+        >
+          <img
+            src={cryptoInfo.length === undefined ? cryptoInfo.image.thumb : ""}
+            alt="Avatar Tailwind CSS Component"
+            className="crypto-picture"
+          />
 
-        <h2 className="crypto-name">
-          {cryptoInfo.length === undefined ? cryptoInfo.name : ""}
-        </h2>
-        <h2 className="crypto-symbol">
-          {cryptoInfo.length === undefined
-            ? cryptoInfo.symbol.toUpperCase()
-            : ""}
-        </h2>
-        {liked ? (
-          <button
-            type="button"
-            className="relative inline-flex items-center gap-x-1.5 rounded bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
-            onClick={handleDislike}
-          >
-            <HeartIcon className="h-6 w-6 shrink-0 cursor-pointer text-red-500" />
-            unlike
-          </button>
-        ) : (
-          <button
-            type="button"
-            className="relative inline-flex items-center gap-x-1.5 rounded bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
-            onClick={handleLike}
-          >
-            <HeartIcon className="h-6 w-6 shrink-0 cursor-pointer text-gray-400" />
-            like
-          </button>
-        )}
-      </div>
+          <h2 className="crypto-name">
+            {cryptoInfo.length === undefined ? cryptoInfo.name : ""}
+          </h2>
+          <h2 className="crypto-symbol">
+            {cryptoInfo.length === undefined
+              ? cryptoInfo.symbol.toUpperCase()
+              : ""}
+          </h2>
+          {liked ? (
+            <button
+              type="button"
+              className="relative inline-flex items-center gap-x-1.5 rounded bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+              onClick={handleDislike}
+            >
+              <HeartIcon className="h-6 w-6 shrink-0 cursor-pointer text-red-500" />
+              unlike
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="relative inline-flex items-center gap-x-1.5 rounded bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+              onClick={handleLike}
+            >
+              <HeartIcon className="h-6 w-6 shrink-0 cursor-pointer text-gray-400" />
+              like
+            </button>
+          )}
+        </div>
+        <button
+          className="button-6"
+          role="button"
+          style={{ width: 300, top: 105 }}
+          onClick={addCryptoToPortfolioHandler}
+        >
+          + Add to portfolio
+        </button>
       </div>
       <div className="search-chart">
         <div className="Search-page-chart">
