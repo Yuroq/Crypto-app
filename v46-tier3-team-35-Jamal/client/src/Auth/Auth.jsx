@@ -48,7 +48,7 @@ const logout = () => {
   userProfile = null;
   auth0Const.logout({
     clientID: import.meta.env.VITE_REACT_APP_AUTH0_CLIENT_ID,
-    returnTo: "http://localhost:5173",
+    returnTo: "/",
   });
 };
 
