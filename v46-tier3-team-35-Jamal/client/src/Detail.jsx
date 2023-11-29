@@ -162,7 +162,7 @@ function Detail({ auth }) {
         console.error("Error liking the coin:", error);
       }
     } else {
-      alert("Please log in to user features");
+      alert("Please log in to use features");
     }
   };
 
@@ -180,7 +180,7 @@ function Detail({ auth }) {
         console.error("Error disliking the coin:", error);
       }
     } else {
-      alert("Please log in to user features");
+      alert("Please log in to use features");
     }
   };
 
