@@ -28,7 +28,8 @@ const userSchema = new Schema({
         type: Boolean,
         default: false
     },
-    favorites: [ {type: Schema.Types.ObjectId, ref: "Crypto"}]
+    favorites: [ {type: Schema.Types.ObjectId, ref: "Crypto"}],
+    portfolio: [ {type: Schema.Types.ObjectId, ref: "Portfolio"}]
   }, {
       timestamps: true
   });

@@ -5,13 +5,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const app = express();
 const PORT = 8000;
-app.use(cors(
-  {
-    origin: ["https://crypto-app-five-amber.vercel.app/"],
-    methods: ["POST", "GET"],
-    credentials: true
-  }
-))
+
 app.use(cors());
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -25,11 +19,13 @@ app.use((req, res, next) => {
 });
 app.use(express.json());
 app.use(morgan("dev"));
-
+app.get("/", function (req, res) {
+  res.render("index", {});
+});
 app.use("/users", require("./routes/userRoutes.js"));
 app.use("/crypto", require("./routes/cryptoRoutes"));
 app.use("/favorite", require("./routes/likeRoutes.js"));
-
+app.use("/portfolioRoutes", require("./routes/portfolioRoutes.js"));
 app.listen(PORT, () => {
   console.log(`Server is running at port ${PORT}...`);
   connectToDB();
